@@ -30,36 +30,36 @@ const KeyBinder = Me.imports.keybinder.KeyBinder;
 const Shell = imports.gi.Shell;
 
 class Extension {
-    constructor() {
-      log('constructing fast focus extension');
+  constructor() {
+    log('constructing fast focus extension');
 
-      this.appSystem = Shell.AppSystem.get_default();
-      this.keyBinder = new KeyBinder();
+    this.appSystem = Shell.AppSystem.get_default();
+    this.keyBinder = new KeyBinder();
+  }
+
+  enable() {
+    for (const appName in MAPPINGS) {
+      this.keyBinder.listenFor(MAPPINGS[appName], () => {
+        this.activateApp(appName);
+      });
     }
+  }
 
-    enable() {
-      for (const appName in MAPPINGS) {
-        this.keyBinder.listenFor(MAPPINGS[appName], () => {
-          this.activateApp(appName);
-        });
-      }
+  disable() {
+    this.keyBinder.clearBindings();
+  }
+
+  activateApp(name) {
+    const app = this.appSystem.get_running().find(app => app.get_name() === name);
+
+    if (app === undefined) {
+      log(`Couldn't locate "${name}" app`);
+    } else {
+      app.activate();
     }
-
-    disable() {
-      this.keyBinder.clearBindings();
-    }
-
-    activateApp(name) {
-      const app = this.appSystem.get_running().find(app => app.get_name() === name);
-
-      if (app === undefined) {
-        log(`Couldn't locate "${name}" app`);
-      } else {
-        app.activate();
-      }
-    }
+  }
 }
 
 function init() {
-    return new Extension();
+  return new Extension();
 }

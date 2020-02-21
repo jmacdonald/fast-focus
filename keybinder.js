@@ -1,7 +1,7 @@
-const Lang = imports.lang
-const Meta = imports.gi.Meta
-const Shell = imports.gi.Shell
-const Main = imports.ui.main
+const Lang = imports.lang;
+const Meta = imports.gi.Meta;
+const Shell = imports.gi.Shell;
+const Main = imports.ui.main;
 
 class KeyBinder {
   constructor() {
