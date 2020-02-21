@@ -18,6 +18,12 @@
 
 /* exported init */
 
+const MAPPINGS = {
+  'Terminal': '<super>return',
+  'Firefox' : '<super>h',
+  'Slack'   : '<super>i'
+};
+
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const KeyBinder = Me.imports.keybinder.KeyBinder;
@@ -32,9 +38,11 @@ class Extension {
     }
 
     enable() {
-      this.keyBinder.listenFor('<super>return', () => {
-        this.activateApp('Terminal');
-      });
+      for (const appName in MAPPINGS) {
+        this.keyBinder.listenFor(MAPPINGS[appName], () => {
+          this.activateApp(appName);
+        });
+      }
     }
 
     disable() {
