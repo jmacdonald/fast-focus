@@ -18,25 +18,27 @@
 
 /* exported init */
 
-const { Shell } = imports.gi;
-const WindowManager = imports.ui.main.wm;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const KeyBinder = Me.imports.keybinder.KeyBinder;
+const Shell = imports.gi.Shell;
 
 class Extension {
     constructor() {
       log('constructing fast focus extension');
 
       this.appSystem = Shell.AppSystem.get_default();
+      this.keyBinder = new KeyBinder();
     }
 
     enable() {
-      WindowManager.setCustomKeybindingHandler(
-        'log-running-apps',
-        Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW,
-        this.logRunningApps.bind(this)
-      );
+      this.keyBinder.listenFor('<super>o', () => {
+        this.logRunningApps();
+      });
     }
 
     disable() {
+      this.keyBinder.clearBindings();
     }
 
     logRunningApps() {
