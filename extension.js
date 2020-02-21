@@ -32,8 +32,8 @@ class Extension {
     }
 
     enable() {
-      this.keyBinder.listenFor('<super>o', () => {
-        this.logRunningApps();
+      this.keyBinder.listenFor('<super>return', () => {
+        this.activateApp('Terminal');
       });
     }
 
@@ -41,9 +41,13 @@ class Extension {
       this.keyBinder.clearBindings();
     }
 
-    logRunningApps() {
-      for (const app of this.appSystem.get_running()) {
-        log(`found ${app.get_name()} running`);
+    activateApp(name) {
+      const app = this.appSystem.get_running().find(app => app.get_name() === name);
+
+      if (app === undefined) {
+        log(`Couldn't locate "${name}" app`);
+      } else {
+        app.activate();
       }
     }
 }
