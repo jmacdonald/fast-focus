@@ -18,11 +18,16 @@
 
 /* exported init */
 
-const MAPPINGS = {
-  'Terminal': '<super>return',
-  'Firefox' : '<super>h',
-  'Slack'   : '<super>i'
-};
+const MAPPINGS = [
+  { app: 'Terminal', binding: '<super>return' },
+  { app: 'Firefox', binding: '<super>h' },
+  { app: 'Slack', binding: '<super>i' },
+];
+
+const SCRATCHPAD_APP_MAPPINGS = [
+  { window_instance: 'devdocs.io', binding: '<super>m' },
+  { window_instance: 'calendar.google.com', binding: '<super>c' }
+];
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
@@ -38,9 +43,14 @@ class Extension {
   }
 
   enable() {
-    for (const appName in MAPPINGS) {
-      this.keyBinder.listenFor(MAPPINGS[appName], () => {
-        this.activateApp(appName);
+    for (const mapping of MAPPINGS) {
+      this.keyBinder.listenFor(mapping.binding, () => {
+        this.activateApp(mapping.app);
+      });
+    }
+    for (const mapping of SCRATCHPAD_APP_MAPPINGS) {
+      this.keyBinder.listenFor(mapping.binding, () => {
+        this.toggleWindow(mapping.window_instance);
       });
     }
   }
@@ -50,12 +60,37 @@ class Extension {
   }
 
   activateApp(name) {
-    const app = this.appSystem.get_running().find(app => app.get_name() === name);
+    const app = this.
+      appSystem.
+      get_running().
+      find(app => app.get_name() === name);
 
     if (app === undefined) {
       log(`Couldn't locate "${name}" app`);
     } else {
       app.activate();
+    }
+  }
+
+  toggleWindow(name) {
+    let windows = [];
+    this.appSystem.get_running().map(app => windows.push(...app.get_windows()));
+    const win = windows.find(win => win.get_wm_class_instance() === name);
+
+    if (win === undefined) {
+      log(`Couldn't locate "${name}" window`);
+    } else {
+      if (win.has_focus()) {
+        win.minimize();
+      } else {
+        win.change_workspace_by_index(
+          global.workspace_manager.get_active_workspace_index(),
+          false
+        );
+        win.unminimize();
+        win.raise();
+        win.focus(0);
+      }
     }
   }
 }
