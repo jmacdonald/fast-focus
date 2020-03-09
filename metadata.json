@@ -3,6 +3,7 @@
   "description": "Keyboard shortcuts to bring windows into focus",
   "uuid": "fast-focus@wastedintelligence.com",
   "shell-version": [
-    "3.34"
+    "3.34",
+    "3.36"
   ]
 }
