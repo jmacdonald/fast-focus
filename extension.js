@@ -20,11 +20,11 @@
 
 const MAPPINGS = [
   { app: 'Terminal', binding: '<super>return' },
-  { app: 'Firefox', binding: '<super>h' },
-  { app: 'Slack', binding: '<super>i' },
+  { app: 'Firefox', binding: '<super>h' }
 ];
 
 const SCRATCHPAD_APP_MAPPINGS = [
+  { window_instance: 'slack', binding: '<super>i' },
   { window_instance: 'devdocs.io', binding: '<super>m' },
   { window_instance: 'calendar.google.com', binding: '<super>c' }
 ];
