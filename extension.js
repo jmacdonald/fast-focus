@@ -30,6 +30,8 @@ const SCRATCHPAD_APP_MAPPINGS = [
   { window_instance: 'todoist.com', binding: '<super>t' }
 ];
 
+const HIDE_SCRATCHPAD_APP_BINDING = '<super>n';
+
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const KeyBinder = Me.imports.keybinder.KeyBinder;
@@ -54,6 +56,9 @@ class Extension {
         this.toggleWindow(mapping.window_instance);
       });
     }
+    this.keyBinder.listenFor(HIDE_SCRATCHPAD_APP_BINDING, () => {
+      this.hideScratchpadWindows();
+    });
   }
 
   disable() {
@@ -83,6 +88,19 @@ class Extension {
         this.hideWindow(win);
       } else {
         this.showWindow(win);
+      }
+    }
+  }
+
+  hideScratchpadWindows() {
+    let scratchpadClasses =
+      SCRATCHPAD_APP_MAPPINGS.map(mapping => mapping.window_instance);
+
+    for (const app of this.appSystem.get_running()) {
+      for (const win of app.get_windows()) {
+        if (scratchpadClasses.includes(win.get_wm_class_instance())) {
+          this.hideWindow(win);
+        }
       }
     }
   }
