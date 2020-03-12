@@ -26,7 +26,8 @@ const MAPPINGS = [
 const SCRATCHPAD_APP_MAPPINGS = [
   { window_instance: 'slack', binding: '<super>i' },
   { window_instance: 'devdocs.io', binding: '<super>m' },
-  { window_instance: 'calendar.google.com', binding: '<super>c' }
+  { window_instance: 'calendar.google.com', binding: '<super>c' },
+  { window_instance: 'todoist.com', binding: '<super>t' }
 ];
 
 const ExtensionUtils = imports.misc.extensionUtils;
