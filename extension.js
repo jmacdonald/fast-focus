@@ -74,25 +74,38 @@ class Extension {
   }
 
   toggleWindow(name) {
-    let windows = [];
-    this.appSystem.get_running().map(app => windows.push(...app.get_windows()));
-    const win = windows.find(win => win.get_wm_class_instance() === name);
+    let win = this.findWindow(name);
 
     if (win === undefined) {
       log(`Couldn't locate "${name}" window`);
     } else {
       if (win.has_focus()) {
-        win.minimize();
+        this.hideWindow(win);
       } else {
-        win.change_workspace_by_index(
-          global.workspace_manager.get_active_workspace_index(),
-          false
-        );
-        win.unminimize();
-        win.raise();
-        win.focus(0);
+        this.showWindow(win);
       }
     }
+  }
+
+  findWindow(name) {
+    let windows = [];
+    this.appSystem.get_running().map(app => windows.push(...app.get_windows()));
+
+    return windows.find(win => win.get_wm_class_instance() === name);
+  }
+
+  showWindow(win) {
+    win.change_workspace_by_index(
+      global.workspace_manager.get_active_workspace_index(),
+      false
+    );
+    win.unminimize();
+    win.raise();
+    win.focus(0);
+  }
+
+  hideWindow(win) {
+    win.minimize();
   }
 }
 
