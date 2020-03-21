@@ -87,6 +87,7 @@ class Extension {
       if (win.has_focus()) {
         this.hideWindow(win);
       } else {
+        this.centerWindow(win);
         this.showWindow(win);
       }
     }
@@ -110,6 +111,20 @@ class Extension {
     this.appSystem.get_running().map(app => windows.push(...app.get_windows()));
 
     return windows.find(win => win.get_wm_class_instance() === name);
+  }
+
+  centerWindow(win) {
+    // Get window and screen dimensions for the primary monitor.
+    const workspace = global.workspace_manager.get_active_workspace();
+    const { width: windowWidth, height: windowHeight } = win.get_frame_rect();
+    const { width: screenWidth, height: screenHeight } = workspace.get_work_area_for_monitor(0);
+
+    // Establish the coordinates required to center the window.
+    const x = screenWidth / 2 - windowWidth / 2;
+    const y = screenHeight / 2 - windowHeight / 2;
+
+    // Center the window, specifying this as a user-driven operation.
+    win.move_frame(true, x, y);
   }
 
   showWindow(win) {
