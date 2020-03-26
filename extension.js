@@ -48,12 +48,12 @@ class Extension {
   enable() {
     for (const mapping of MAPPINGS) {
       this.keyBinder.listenFor(mapping.binding, () => {
-        this.activateApp(mapping.app);
+        this.activateApp(mapping);
       });
     }
     for (const mapping of SCRATCHPAD_APP_MAPPINGS) {
       this.keyBinder.listenFor(mapping.binding, () => {
-        this.toggleWindow(mapping.window_instance);
+        this.toggleWindow(mapping);
       });
     }
     this.keyBinder.listenFor(HIDE_SCRATCHPAD_APP_BINDING, () => {
@@ -65,59 +65,69 @@ class Extension {
     this.keyBinder.clearBindings();
   }
 
-  activateApp(name) {
-    const app = this.
-      appSystem.
-      get_running().
-      find(app => app.get_name() === name);
+  activateApp(mapping) {
+    const windowObject = this.findWindowObject(mapping);
 
-    if (app === undefined) {
-      log(`Couldn't locate "${name}" app`);
+    if (windowObject === undefined) {
+      log(`Couldn't locate window with matching definition.`);
     } else {
-      app.activate();
+      this.showWindow(windowObject.window);
     }
   }
 
-  toggleWindow(name) {
-    let win = this.findWindow(name);
+  toggleWindow(mapping) {
+    const windowObject = this.findWindowObject(mapping);
 
-    if (win === undefined) {
-      log(`Couldn't locate "${name}" window`);
+    if (windowObject === undefined) {
+      log(`Couldn't locate window with matching definition.`);
     } else {
-      if (win.has_focus()) {
-        this.hideWindow(win);
-      } else {
-        this.centerWindow(win);
-        this.showWindow(win);
+      if (windowObject.window.has_focus()) {
+        this.hideWindow(windowObject.window);
+    } else {
+      this.centerWindow(windowObject.window);
+        this.showWindow(windowObject.window);
       }
     }
   }
 
   hideScratchpadWindows() {
-    let scratchpadClasses =
-      SCRATCHPAD_APP_MAPPINGS.map(mapping => mapping.window_instance);
-
-    for (const app of this.appSystem.get_running()) {
-      for (const win of app.get_windows()) {
-        if (scratchpadClasses.includes(win.get_wm_class_instance())) {
-          this.hideWindow(win);
-        }
-      }
+    for(const mapping of SCRATCHPAD_APP_MAPPINGS) {
+      const windowObject = this.findWindowObject(mapping);
+      this.hideWindow(windowObject.window);
     }
   }
 
-  findWindow(name) {
-    let windows = [];
-    this.appSystem.get_running().map(app => windows.push(...app.get_windows()));
+  findWindowObject(definition) {
+    const windows = [];
+    for (const app of this.appSystem.get_running()) {
+      for (const win of app.get_windows()) {
+        windows.push({app: app, window: win});
+      }
+    }
+    const matchingWindows = windows.filter((windowObject) => {
+      if(!this.matchValue(definition.window_instance, windowObject.window.get_wm_class_instance())) {return false; }
+      if(!this.matchValue(definition.title, windowObject.window.get_title())) {return false; }
+      if(!this.matchValue(definition.app, windowObject.app.get_name())) {return false; }
+      return true;
+    });
+    if(matchingWindows.length > 0) {
+      return matchingWindows[0];
+    }
+  }
 
-    return windows.find(win => win.get_wm_class_instance() === name);
+  matchValue(regexExpression, windowComponent) {
+    if (!regexExpression || regexExpression === '') {
+      return true;
+    }
+    const regex = new RegExp(regexExpression);
+    return regex.test(windowComponent);
   }
 
   centerWindow(win) {
     // Get window and screen dimensions for the primary monitor.
     const workspace = global.workspace_manager.get_active_workspace();
-    const { width: windowWidth, height: windowHeight } = win.get_frame_rect();
-    const { width: screenWidth, height: screenHeight } = workspace.get_work_area_for_monitor(0);
+    const {width: windowWidth, height: windowHeight} = win.get_frame_rect();
+    const {width: screenWidth, height: screenHeight} = workspace.get_work_area_for_monitor(0);
 
     // Establish the coordinates required to center the window.
     const x = screenWidth / 2 - windowWidth / 2;
