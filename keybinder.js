@@ -44,7 +44,7 @@ class KeyBinder {
   }
 
   clearBindings() {
-    for (let binding of self.bindings) {
+    for (let binding of this.bindings) {
       global.display.ungrab_accelerator(binding[1].action);
       Main.wm.allowKeybinding(binding[1].name, Shell.ActionMode.NONE);
     }
