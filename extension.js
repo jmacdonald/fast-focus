@@ -114,14 +114,27 @@ class Extension {
   }
 
   centerWindow(win) {
-    // Get window and screen dimensions for the primary monitor.
-    const workspace = global.workspace_manager.get_active_workspace();
+    // Get the dimensions of the window.
     const { width: windowWidth, height: windowHeight } = win.get_frame_rect();
-    const { width: screenWidth, height: screenHeight } = workspace.get_work_area_for_monitor(0);
 
-    // Establish the coordinates required to center the window.
-    const x = screenWidth / 2 - windowWidth / 2;
-    const y = screenHeight / 2 - windowHeight / 2;
+    // Get the dimensions of the primary display and its position
+    // relative to the workspace (which includes all monitors).
+    const workspace = global.workspace_manager.get_active_workspace();
+    const display = workspace.get_display();
+    const primaryMonitorIndex = display.get_primary_monitor();
+    const {
+      width: monitorWidth,
+      height: monitorHeight
+    } = workspace.get_work_area_for_monitor(primaryMonitorIndex);
+    const {
+      x: monitorX,
+      y: monitorY
+    } = display.get_monitor_geometry(primaryMonitorIndex);
+
+    // Establish the coordinates required to center the window on the
+    // primary monitor, accounting for its position in the workspace.
+    const x = monitorWidth / 2 - windowWidth / 2 + monitorX;
+    const y = monitorHeight / 2 - windowHeight / 2 + monitorY;
 
     // Center the window, specifying this as a user-driven operation.
     win.move_frame(true, x, y);
