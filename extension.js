@@ -103,7 +103,10 @@ class Extension {
 
     for (const app of this.appSystem.get_running()) {
       for (const win of app.get_windows()) {
-        if (scratchpadClasses.includes(win.get_wm_class_instance())) {
+        if (
+          scratchpadClasses.includes(win.get_title()) ||
+          scratchpadClasses.includes(win.get_wm_class_instance())
+        ) {
           this.hideWindow(win);
         }
       }
