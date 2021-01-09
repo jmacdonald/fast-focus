@@ -110,7 +110,27 @@ class Extension {
     let windows = [];
     this.appSystem.get_running().map(app => windows.push(...app.get_windows()));
 
-    return windows.find(win => win.get_wm_class_instance() === name);
+    const win = windows.find(win => {
+      return win.get_title() === name || win.get_wm_class_instance() === name
+    });
+
+    if (win === undefined) {
+      log(`Couldn't locate "${name}" window`);
+      log(`Found these other windows:`);
+      this.logWindows();
+    }
+
+    return win;
+  }
+
+  logWindows() {
+    for (const app of this.appSystem.get_running()) {
+      for (const win of app.get_windows()) {
+        log(`=========================`);
+        log(`title: "${win.get_title()}"`);
+        log(`class instance: "${win.get_wm_class_instance()}"`);
+      }
+    }
   }
 
   centerWindow(win) {
