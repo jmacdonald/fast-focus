@@ -48,7 +48,13 @@ class Extension {
   enable() {
     for (const mapping of MAPPINGS) {
       this.keyBinder.listenFor(mapping.binding, () => {
-        this.activateApp(mapping.app);
+        if (mapping.app) {
+          this.activateApp(mapping.app);
+        } else {
+          const win = this.findWindow(mapping.window_instance);
+
+          if (win !== undefined) { this.showWindow(win); }
+        }
       });
     }
     for (const mapping of SCRATCHPAD_APP_MAPPINGS) {
