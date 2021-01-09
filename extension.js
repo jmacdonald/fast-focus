@@ -81,15 +81,13 @@ class Extension {
   toggleWindow(name) {
     let win = this.findWindow(name);
 
-    if (win === undefined) {
-      log(`Couldn't locate "${name}" window`);
+    if (win === undefined) { return; }
+
+    if (win.has_focus()) {
+      this.hideWindow(win);
     } else {
-      if (win.has_focus()) {
-        this.hideWindow(win);
-      } else {
-        this.centerWindow(win);
-        this.showWindow(win);
-      }
+      this.centerWindow(win);
+      this.showWindow(win);
     }
   }
 
