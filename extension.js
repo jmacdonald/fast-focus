@@ -31,6 +31,8 @@ const SCRATCHPAD_APP_MAPPINGS = [
 ];
 
 const HIDE_SCRATCHPAD_APP_BINDING = '<super>n';
+const SCRATCHPAD_WIDTH  = 1500;
+const SCRATCHPAD_HEIGHT = 1000;
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
@@ -92,6 +94,7 @@ class Extension {
     if (win.has_focus()) {
       this.hideWindow(win);
     } else {
+      this.resizeWindow(win);
       this.centerWindow(win);
       this.showWindow(win);
     }
@@ -138,6 +141,11 @@ class Extension {
         log(`class instance: "${win.get_wm_class_instance()}"`);
       }
     }
+  }
+
+  resizeWindow(win) {
+    const { x: x, y: y } = win.get_frame_rect();
+    win.move_resize_frame(true, x, y, SCRATCHPAD_WIDTH, SCRATCHPAD_HEIGHT);
   }
 
   centerWindow(win) {
