@@ -18,19 +18,35 @@
 
 /* exported init */
 
+//const myShell = imports.gi.Shell;
+//appSystem = Shell.AppSystem.get_default();
+//appSystem.get_running().map(x => JSON.stringify({ name: x.get_name(), windows: x.get_windows().map(y => y.get_wm_class_instance()) }))
+
+//How to look into:
+//Alt-F2, then type `lg`
+//imports.gi.Shell.AppSystem.get_default().get_running().map(x => JSON.stringify({ name: x.get_name(), windows: x.get_windows().map(y => y.get_wm_class_instance()) }))
+
 const MAPPINGS = [
-  { app: 'Terminal', binding: '<super>return' },
-  { app: 'Firefox', binding: '<super>h' }
+  {app: 'Sublime Text', binding: '<alt>u'},
+  {app: 'Sublime Merge', binding: '<alt>m'},
+  {app: 'Google Chrome', window_instance: 'google-chrome', title: '^(?!DevTools - )', binding: '<alt>c'},
+  {app: 'Google Chrome', title: '^(DevTools - )', binding: '<alt>v'},
+  {app: 'Zoom', binding: '<alt>o'},
+  {app: 'MySQL Workbench', binding: '<alt>y'},
+  {app: 'PhpStorm', title: '(^builder)', binding: '<alt>b'},
+  {app: 'PhpStorm', title: '(^enterprise)',  binding: '<alt>e'},
 ];
 
 const SCRATCHPAD_APP_MAPPINGS = [
-  { window_instance: 'slack', binding: '<super>i' },
-  { window_instance: 'devdocs.io', binding: '<super>m' },
-  { window_instance: 'calendar.google.com', binding: '<super>c' },
-  { window_instance: 'todoist.com', binding: '<super>t' }
+  {window_instance: 'slack', binding: '<alt>s'},
+  {window_instance: 'gnome-terminal-server', binding: '<alt>t'},
+  {window_instance: 'spotify', binding: '<alt>p'},
+  {window_instance: 'calendar.google.com', binding: '<alt><shift>c'},
+  {window_instance: 'gmail.google.com', binding: '<alt><shift>g'},
+  {window_instance: 'www.notion.so__Todo-2d09c34e06d04125b12ae271743d9e4b', binding: '<alt><shift>n'},
 ];
 
-const HIDE_SCRATCHPAD_APP_BINDING = '<super>n';
+const HIDE_SCRATCHPAD_APP_BINDING = '<alt>q';
 
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
@@ -93,7 +109,9 @@ class Extension {
   hideScratchpadWindows() {
     for(const mapping of SCRATCHPAD_APP_MAPPINGS) {
       const windowObject = this.findWindowObject(mapping);
-      this.hideWindow(windowObject.window);
+      if(windowObject) {
+        this.hideWindow(windowObject.window);
+      }
     }
   }
 
@@ -120,7 +138,10 @@ class Extension {
       return true;
     }
     const regex = new RegExp(regexExpression);
-    return regex.test(windowComponent);
+    const result = regex.test(windowComponent);
+    //Verbose logging
+    //log(`regexExpression: ${regexExpression}, windowComponent: ${windowComponent}, result: ${result}`);
+    return result;
   }
 
   centerWindow(win) {
