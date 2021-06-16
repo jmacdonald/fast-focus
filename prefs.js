@@ -66,9 +66,6 @@ var FrameBoxRow = new Lang.Class({
         this._box = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
         });
-        //this.set_margin(5);
-        //this.set_row_spacing(20);
-        //this.set_column_spacing(20);
         this.parent({
             child: this._box
         });
@@ -265,8 +262,5 @@ var BindingsPage = new Lang.Class({
 function buildPrefsWidget() {
     let widget = new PrefsWidget();
     widget.show();
-
     return widget;
 }
-
-
