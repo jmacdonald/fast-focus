@@ -138,7 +138,6 @@ const PrefsWidget = new GObject.Class({
             orientation: Gtk.Orientation.VERTICAL,
         });
         this.set_spacing(5);
-        // this.add_ccs_class("box-prefs-widget");
         this.settings = Convenience.getSettings();
         this.menuItems = new MenuItems.MenuItems(this.settings);
 
@@ -146,15 +145,15 @@ const PrefsWidget = new GObject.Class({
         notebook.set_margin_start(6);
         notebook.set_margin_end(6);
 
-        let indicatorsPage = new IndicatorsPage(this.settings, this.menuItems);
-        notebook.append_page(indicatorsPage, indicatorsPage.title);
+        let bindingsPage = new BindingsPage(this.settings, this.menuItems);
+        notebook.append_page(bindingsPage, bindingsPage.title);
 
         this.append(notebook);
     }
 });
 
-var IndicatorsPage = new Lang.Class({
-    Name: "IndicatorsPage",
+var BindingsPage = new Lang.Class({
+    Name: "BindingsPage",
     Extends: NotebookPage,
 
     _init: function (settings, menuItems) {
@@ -162,12 +161,9 @@ var IndicatorsPage = new Lang.Class({
         this.settings = settings;
         this.menuItems = menuItems;
 
-        this.indicatorsFrame = new FrameBox("");
+        this.bindingsFrame = new FrameBox("");
         this.buildList();
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // add the frames
-        this.append(this.indicatorsFrame);
+        this.append(this.bindingsFrame);
         this.addFooter();
     },
     addFooter: function() {
@@ -188,11 +184,12 @@ var IndicatorsPage = new Lang.Class({
     },
     buildList: function () {
 
-        this.remove(this.indicatorsFrame);
+        //Reset from scratch
+        this.remove(this.bindingsFrame);
+
         let items = this.menuItems.getItems();
-        //glib-compile-schemas schemas
-        this.indicatorsFrame = new FrameBox(_("Hello"));
-        this.append(this.indicatorsFrame);
+        this.bindingsFrame = new FrameBox(_(""));
+        this.append(this.bindingsFrame);
 
         this.indicatorsArray = new Array();
         this.statusArray = new Array();
@@ -206,7 +203,7 @@ var IndicatorsPage = new Lang.Class({
     },
     newItem: function() {
         let items = this.menuItems.getItems();
-        let item = this.menuItems.addItem(this.indicatorsFrame);
+        let item = this.menuItems.addItem(this.bindingsFrame);
         this.addItem(item);
     },
     addItem: function(item) {
@@ -227,11 +224,11 @@ var IndicatorsPage = new Lang.Class({
         indicatorRow.add(deleteButton);
 
 
-        this.indicatorsFrame.add(indicatorRow);
+        this.bindingsFrame.add(indicatorRow);
     },
     deleteItem: function(object, item, indicatorRow) {
-        this.menuItems.deleteItem(item, this.indicatorsFrame);
-        this.indicatorsFrame.remove(indicatorRow);
+        this.menuItems.deleteItem(item, this.bindingsFrame);
+        this.bindingsFrame.remove(indicatorRow);
     },
     addType: function(item) {
         let container = this.addLabelContainer('Type');
@@ -241,7 +238,6 @@ var IndicatorsPage = new Lang.Class({
         positionCombo.append_text(_("Focus"));
         positionCombo.append_text(_("Scratchpad"));
 
-        this.indicatorsFrame.set_label(item.type);
         positionCombo.set_active(item.type);
         positionCombo.connect("changed", Lang.bind(this, this.changeType, item));
         container.append(positionCombo);
