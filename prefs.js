@@ -16,33 +16,6 @@ const MenuItems = Extension.imports.menuItems;
 function init() {
 }
 
-var DialogWindow = new Lang.Class({
-    Name: "DialogWindow",
-    GTypeName: "DialogWindow",
-    Extends: Gtk.Dialog,
-
-    _init: function (title, parent) {
-        this.parent({
-            title: title,
-            transient_for: parent.get_toplevel(),
-            use_header_bar: true,
-            modal: true
-        });
-        let vbox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-        });
-        vbox.set_homogeneous(false);
-        vbox.set_spacing(20);
-
-        this._createLayout(vbox);
-        this.get_content_area().add(vbox);
-    },
-
-    _createLayout: function (vbox) {
-        throw "Not implemented!";
-    }
-});
-
 const NotebookPage = new GObject.Class({
     Name: "NotebookPage",
     GTypeName: "NotebookPage",
@@ -52,9 +25,8 @@ const NotebookPage = new GObject.Class({
         this.parent({
             orientation: Gtk.Orientation.VERTICAL,
         });
-        // this.set_margin(24);
         this.set_homogeneous(false);
-	this.set_spacing(20);
+	    this.set_spacing(20);
         this.title = new Gtk.Label({
             label: "<b>" + title + "</b>",
             use_markup: true,
