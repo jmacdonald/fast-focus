@@ -214,6 +214,9 @@ var IndicatorsPage = new Lang.Class({
 
         indicatorRow.add(this.addType(item));
         indicatorRow.add(this.addLabelAndTextbox('App Container', item, 'app'));
+        indicatorRow.add(this.addLabelAndTextbox('window Instance', item, 'window_instance'));
+        indicatorRow.add(this.addLabelAndTextbox('Title', item, 'title'));
+        indicatorRow.add(this.addLabelAndTextbox('Binding', item, 'binding'));
 
         let deleteButton = new Gtk.Button({
             visible: true,
