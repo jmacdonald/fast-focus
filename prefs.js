@@ -213,7 +213,7 @@ var IndicatorsPage = new Lang.Class({
         let indicatorRow = new FrameBoxRow();
 
         indicatorRow.add(this.addType(item));
-        indicatorRow.add(this.addLabelAndTextbox('App Container'));
+        indicatorRow.add(this.addLabelAndTextbox('App Container', item, 'app'));
 
         let deleteButton = new Gtk.Button({
             visible: true,
@@ -240,19 +240,24 @@ var IndicatorsPage = new Lang.Class({
 
         this.indicatorsFrame.set_label(item.type);
         positionCombo.set_active(item.type);
-        positionCombo.connect("changed", Lang.bind(this, this.enableCenter, item));
+        positionCombo.connect("changed", Lang.bind(this, this.changeType, item));
         container.append(positionCombo);
         return container;
     },
-    addLabelAndTextbox: function (text) {
+    addLabelAndTextbox: function (text, item, property) {
         let container = this.addLabelContainer(text);
 
         let textbox = new Gtk.Entry({
             halign: Gtk.Align.END
         });
+        textbox.set_text(item[property]);
+        textbox.connect("changed", Lang.bind(this, this.changeProperty, item, property));
 
         container.append(textbox);
         return container;
+    },
+    changeProperty: function(object, item, property) {
+       this.menuItems.setItemProperty(item, property, object.get_text());
     },
     addLabelContainer: function(text) {
         let container = new Gtk.Box({
@@ -284,7 +289,7 @@ var IndicatorsPage = new Lang.Class({
        else
             this.menuItems.changeEnable(index, object.active);
     },
-    enableCenter: function (object, index) {
+    changeType: function (object, index) {
         this.menuItems.changePosition(index, object.get_active());
         this.changeOrder(null, index, -index);
     },

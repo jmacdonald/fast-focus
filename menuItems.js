@@ -28,10 +28,16 @@ var MenuItems = new Lang.Class({
     },
     addItem: function() {
         let items = this.getItems();
-        let item = { id: this.uuid(), app: '', window_instance: '', title: '', binding: '', type: 'Scratchpad' };
+        let item = { id: this.uuid(), app: '', window_instance: '', title: '', binding: '', type: '1' };
         items.push(item);
         this.setItems(items);
         return item;
+    },
+    setItemProperty: function(item, property, value) {
+        let items = this.getItems();
+        let foundItem = items.find(i => i.id === item.id);
+        foundItem[property] = value;
+        this.setItems(items);
     },
     deleteItem: function(item) {
         let items = this.getItems();
