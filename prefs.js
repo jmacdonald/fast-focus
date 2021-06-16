@@ -16,27 +16,6 @@ const MenuItems = Extension.imports.menuItems;
 function init() {
 }
 
-const IconButton = new GObject.Class({
-    Name: "IconButton",
-    GTypeName: "IconButton",
-    Extends: Gtk.Button,
-
-    _init: function (params) {
-        this.parent({});
-        if (params["circular"]) {
-            let context = this.get_style_context();
-            context.add_class("circular");
-        }
-        if (params["icon_name"]) {
-            let image = new Gtk.Image({
-                icon_name: params["icon_name"],
-                xalign: 0.46
-            });
-            this.add(image);
-        }
-    }
-});
-
 var DialogWindow = new Lang.Class({
     Name: "DialogWindow",
     GTypeName: "DialogWindow",
