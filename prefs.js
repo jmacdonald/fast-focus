@@ -244,19 +244,6 @@ var BindingsPage = new Lang.Class({
         this.settings.set_value("items", this.settings.get_default_value("items"));
         this.buildList();
     },
-    separatingEnable: function (object, p) {
-        if (object.active) {
-            this.settings.set_boolean("separate-date-and-notification" , true);
-	}
-	else {
-	    for(let x = 0; x < this.labelsArray.length; x++) {
-		 if (this.labelsArray[x] == _("Calendar")) {
-                     this.statusArray[x].set_active(false);
-		 }
-	    }
-            this.settings.set_boolean("separate-date-and-notification" , false);
-	}
-    },
 });
 
 function buildPrefsWidget() {
