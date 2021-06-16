@@ -156,23 +156,22 @@ var BindingsPage = new Lang.Class({
     },
     addItem: function(item) {
         let indicatorRow = new FrameBoxRow();
-
         indicatorRow.add(this.addType(item));
         indicatorRow.add(this.addLabelAndTextbox('App Container', item, 'app'));
         indicatorRow.add(this.addLabelAndTextbox('window Instance', item, 'window_instance'));
         indicatorRow.add(this.addLabelAndTextbox('Title', item, 'title'));
         indicatorRow.add(this.addLabelAndTextbox('Binding', item, 'binding'));
-
+        indicatorRow.add(this.addDeleteButton(item, indicatorRow));
+        this.bindingsFrame.add(indicatorRow);
+    },
+    addDeleteButton: function(item, indicatorRow) {
         let deleteButton = new Gtk.Button({
             visible: true,
             label: _("X"),
             can_focus: true
         });
         deleteButton.connect("clicked", Lang.bind(this, this.deleteItem, item, indicatorRow));
-        indicatorRow.add(deleteButton);
-
-
-        this.bindingsFrame.add(indicatorRow);
+        return deleteButton;
     },
     deleteItem: function(object, item, indicatorRow) {
         this.menuItems.deleteItem(item, this.bindingsFrame);
@@ -221,28 +220,8 @@ var BindingsPage = new Lang.Class({
         container.append(label);
         return container;
     },
-    changeOrder: function (o, index, order) {
-        this.menuItems.changeOrder(index, order);
-        this.buildList();
-    },
-    changeEnable: function (object, p, index) {
-        let items = this.menuItems.getItems();
-        let item = items[index];
-
-        if (_(item["label"]) == _("Calendar") &&
-           !this.settings.get_boolean("separate-date-and-notification")) {
-            object.set_active(false);
-       }
-       else
-            this.menuItems.changeEnable(index, object.active);
-    },
     changeType: function (object, index) {
         this.menuItems.changePosition(index, object.get_active());
-        this.changeOrder(null, index, -index);
-    },
-    resetPosition: function () {
-        this.settings.set_value("items", this.settings.get_default_value("items"));
-        this.buildList();
     },
 });
 
