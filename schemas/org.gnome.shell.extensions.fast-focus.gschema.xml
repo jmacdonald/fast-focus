@@ -1,0 +1,8 @@
+<schemalist gettext-domain="gnome-shell-extensions">
+    <schema id="org.gnome.shell.extensions.fast-focus" path="/org/gnome/shell/extensions/fast-focus/">
+        <key name="items" type="s">
+            <default>"[]"</default>
+            <summary>Bindings</summary>
+        </key>
+    </schema>
+</schemalist>
