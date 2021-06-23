@@ -29,8 +29,8 @@
 const MAPPINGS = [
   {app: 'Sublime Text', binding: '<alt>u'},
   {app: 'Sublime Merge', binding: '<alt>m'},
-  {app: 'Chromium-browser', window_instance: 'chromium-browser', title: '^(?!DevTools - )', binding: '<alt>c'},
-  {app: 'Chromium-browser', title: '^(DevTools - )', binding: '<alt>v'},
+  {app: 'Chromium', window_instance: 'chromium', title: '^(?!DevTools - )', binding: '<alt>c'},
+  {app: 'Chromium', title: '^(DevTools - )', binding: '<alt>v'},
   {app: 'KeePassXC', binding: '<alt>k'},
   {app: 'Zoom', binding: '<alt>o'},
   {app: 'MySQL Workbench', binding: '<alt>y'},
