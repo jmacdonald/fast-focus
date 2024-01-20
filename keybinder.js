@@ -7,14 +7,14 @@ export default class KeyBinder {
 
     global.display.connect(
       'accelerator-activated',
-      Lang.bind(this, function(display, action, deviceId, timestamp) {
+      function(display, action, deviceId, timestamp) {
         log(
           'Accelerator Activated: [display={}, action={}, deviceId={}, timestamp={}]',
           display, action, deviceId, timestamp
         );
         this._onAccelerator(action);
-      })
-    )
+      }.bind(this)
+    );
   }
 
   listenFor(keyCombination, callback) {
