@@ -1,9 +1,7 @@
-const Lang = imports.lang;
-const Meta = imports.gi.Meta;
-const Shell = imports.gi.Shell;
-const Main = imports.ui.main;
+import Meta from 'gi://Meta';
+import Shell from 'gi://Shell';
 
-var KeyBinder = class {
+export default class KeyBinder {
   constructor() {
     this.bindings = new Map();
 
