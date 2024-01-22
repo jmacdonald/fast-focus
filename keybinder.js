@@ -1,6 +1,8 @@
 import Meta from 'gi://Meta';
 import Shell from 'gi://Shell';
 
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+
 export default class KeyBinder {
   constructor() {
     this.bindings = new Map();
