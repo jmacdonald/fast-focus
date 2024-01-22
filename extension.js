@@ -19,14 +19,10 @@ const SCRATCHPAD_WIDTH  = 1500;
 const SCRATCHPAD_HEIGHT = 1000;
 
 export default class FastFocusExtension extends Extension {
-  constructor() {
-    log('constructing fast focus extension');
-
+  enable() {
     this.appSystem = Shell.AppSystem.get_default();
     this.keyBinder = new KeyBinder();
-  }
 
-  enable() {
     for (const mapping of MAPPINGS) {
       this.keyBinder.listenFor(mapping.binding, () => {
         if (mapping.app) {
