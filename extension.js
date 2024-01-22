@@ -8,10 +8,10 @@ const MAPPINGS = [
 ];
 
 const SCRATCHPAD_APP_MAPPINGS = [
-  { window_instance: 'slack', binding: '<super>i' },
-  { window_instance: 'devdocs.io', binding: '<super>m' },
-  { window_instance: 'calendar.google.com', binding: '<super>c' },
-  { window_instance: 'todoist.com', binding: '<super>t' }
+  { window_instance: 'Slack', binding: '<super>i' },
+  { window_instance: 'chrome-devdocs.io', binding: '<super>m' },
+  { window_instance: 'chrome-calendar.google.com', binding: '<super>c' },
+  { window_instance: 'chrome-todoist.com', binding: '<super>t' }
 ];
 
 const HIDE_SCRATCHPAD_APP_BINDING = '<super>n';
@@ -96,7 +96,7 @@ export default class FastFocusExtension extends Extension {
     this.appSystem.get_running().map(app => windows.push(...app.get_windows()));
 
     const win = windows.find(win => {
-      return win.get_title() === name || win.get_wm_class_instance() === name
+      return win.get_title() === name || win.get_wm_class_instance().startsWith(name)
     });
 
     if (win === undefined) {
