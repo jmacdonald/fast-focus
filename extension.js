@@ -3,7 +3,7 @@ import Shell from 'gi://Shell';
 import KeyBinder from './keybinder.js';
 
 const MAPPINGS = [
-  { app: 'Terminal', binding: '<super>return' },
+  { app: 'Console', binding: '<super>return' },
   { app: 'Firefox', binding: '<super>h' }
 ];
 
