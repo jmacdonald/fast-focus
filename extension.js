@@ -4,7 +4,8 @@ import KeyBinder from './keybinder.js';
 
 const MAPPINGS = [
   { app: 'Console', binding: '<super>return' },
-  { app: 'Firefox', binding: '<super>h' }
+  { app: 'Firefox', binding: '<super>h' },
+  { app: 'Zoom', binding: '<super>z' }
 ];
 
 const SCRATCHPAD_APP_MAPPINGS = [
