@@ -9,6 +9,7 @@ const MAPPINGS = [
 ];
 
 const SCRATCHPAD_APP_MAPPINGS = [
+  { window_instance: 'discord', binding: '<super>g' },
   { window_instance: 'Slack', binding: '<super>i' },
   { window_instance: 'chrome-devdocs.io', binding: '<super>m' },
   { window_instance: 'chrome-calendar.google.com', binding: '<super>c' },
