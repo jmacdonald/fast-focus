@@ -85,7 +85,7 @@ export default class FastFocusExtension extends Extension {
       for (const win of app.get_windows()) {
         if (
           scratchpadClasses.includes(win.get_title()) ||
-          scratchpadClasses.includes(win.get_wm_class_instance())
+          scratchpadClasses.find(klass => win.get_wm_class_instance().startsWith(klass))
         ) {
           this.hideWindow(win);
         }
